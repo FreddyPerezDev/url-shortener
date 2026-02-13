@@ -6,14 +6,13 @@ export const prerender = false;
 
 const REDIRECT_RATE_LIMIT = { maxRequests: 30, windowMs: 60 * 1000 };
 
-export const GET: APIRoute = async ({ params, request }) => {
+const SLUG_REGEX = /^[A-Za-z0-9]{1,20}$/;
+
+export const GET: APIRoute = async ({ params, request, redirect }) => {
 	const { id } = params;
 
-	if (!id) {
-		return new Response(JSON.stringify({ error: "ID no proporcionado." }), {
-			status: 400,
-			headers: { "Content-Type": "application/json" },
-		});
+	if (!id || !SLUG_REGEX.test(id)) {
+		return redirect("/404", 302);
 	}
 
 	const clientIp =
@@ -40,10 +39,7 @@ export const GET: APIRoute = async ({ params, request }) => {
 		});
 
 		if (result.rows.length === 0) {
-			return new Response(JSON.stringify({ error: "Enlace no encontrado." }), {
-				status: 404,
-				headers: { "Content-Type": "application/json" },
-			});
+			return redirect("/404", 302);
 		}
 
 		const originalUrl = result.rows[0].original_url as string;
