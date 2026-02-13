@@ -1,9 +1,13 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
-import { nanoid } from "nanoid";
+import { customAlphabet } from "nanoid";
 import { turso } from "../lib/turso";
 
 const NANOID_LENGTH = 8;
+const nanoid = customAlphabet(
+	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+	NANOID_LENGTH,
+);
 
 export const server = {
 	shortenUrl: defineAction({
@@ -13,7 +17,7 @@ export const server = {
 				.url("La URL proporcionada no es válida."),
 		}),
 		handler: async ({ url }) => {
-			const id = nanoid(NANOID_LENGTH);
+			const id = nanoid();
 
 			try {
 				await turso.execute({
