@@ -33,3 +33,77 @@ import Input from "./Input.astro";
     <Button type="submit" variant="primary">Acortar</Button>
   </div>
 </form>
+
+<script>
+  import { actions, isInputError } from "astro:actions";
+
+  const form = document.getElementById("shorten-form") as HTMLFormElement;
+  const submitBtn = form?.querySelector(
+    'button[type="submit"]',
+  ) as HTMLButtonElement;
+  const resultContainer = document.getElementById("shorten-result");
+  const resultUrl = document.getElementById("shorten-url");
+  const errorContainer = document.getElementById("shorten-error");
+  const errorMessage = document.getElementById("error-message");
+  const copyBtn = document.getElementById("copy-btn");
+  const copyText = document.getElementById("copy-text");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const url = formData.get("url") as string;
+
+    submitBtn.disabled = true;
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.textContent = "Acortando...";
+
+    resultContainer?.classList.add("hidden");
+    errorContainer?.classList.add("hidden");
+
+    const { data, error } = await actions.shortenUrl({ url });
+
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalBtnText;
+
+    if (error) {
+      let message: string;
+
+      if (isInputError(error)) {
+        message = error.fields.url?.join(", ") || "URL inválida.";
+      } else {
+        message = error.message;
+      }
+
+      if (errorMessage) errorMessage.textContent = message;
+      errorContainer?.classList.remove("hidden");
+      return;
+    }
+
+    if (data && resultUrl) {
+      const shortUrl = `${window.location.origin}/${data.id}`;
+      resultUrl.textContent = shortUrl;
+      resultUrl.setAttribute("data-url", shortUrl);
+    }
+
+    resultContainer?.classList.remove("hidden");
+    form.reset();
+  });
+
+  copyBtn?.addEventListener("click", async () => {
+    const url =
+      resultUrl?.getAttribute("data-url") || resultUrl?.textContent || "";
+
+    try {
+      await navigator.clipboard.writeText(url);
+      if (copyText) {
+        copyText.textContent = "¡Copiado!";
+        setTimeout(() => {
+          copyText.textContent = "Copiar";
+        }, 2000);
+      }
+    } catch {
+      if (copyText) copyText.textContent = "Error";
+    }
+  });
+</script>

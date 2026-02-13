@@ -1,12 +1,4 @@
----
-interface Props {
-  url?: string;
-}
-
-const { url = "lnks.hr/xyz123" } = Astro.props;
----
-
-<div id="shorten-result" class="w-full max-w-lg">
+<div id="shorten-result" class="hidden w-full max-w-lg">
   <div
     class="flex items-center justify-between bg-surface/60 rounded-full px-5 py-3 border border-accent/10"
   >
@@ -25,9 +17,10 @@ const { url = "lnks.hr/xyz123" } = Astro.props;
         ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path
           d="M22 4 12 14.01l-3-3"></path></svg
       >
-      <span class="text-primary text-sm font-mono">{url}</span>
+      <span id="shorten-url" class="text-primary text-sm font-mono"></span>
     </div>
     <button
+      id="copy-btn"
       type="button"
       class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors text-sm cursor-pointer"
     >
@@ -45,7 +38,7 @@ const { url = "lnks.hr/xyz123" } = Astro.props;
           d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
         ></path></svg
       >
-      Copiar
+      <span id="copy-text">Copiar</span>
     </button>
   </div>
 </div>
