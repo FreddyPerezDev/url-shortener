@@ -1,9 +1,12 @@
 import type { APIRoute } from "astro";
+import { rateLimiter } from "../lib/rate-limiter";
 import { turso } from "../lib/turso";
 
 export const prerender = false;
 
-export const GET: APIRoute = async ({ params }) => {
+const REDIRECT_RATE_LIMIT = { maxRequests: 30, windowMs: 60 * 1000 };
+
+export const GET: APIRoute = async ({ params, request }) => {
 	const { id } = params;
 
 	if (!id) {
@@ -11,6 +14,23 @@ export const GET: APIRoute = async ({ params }) => {
 			status: 400,
 			headers: { "Content-Type": "application/json" },
 		});
+	}
+
+	const clientIp =
+		request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+		request.headers.get("cf-connecting-ip") ||
+		"unknown";
+
+	const { allowed } = rateLimiter(`redirect:${clientIp}`, REDIRECT_RATE_LIMIT);
+
+	if (!allowed) {
+		return new Response(
+			JSON.stringify({ error: "Demasiadas solicitudes. Intenta más tarde." }),
+			{
+				status: 429,
+				headers: { "Content-Type": "application/json" },
+			},
+		);
 	}
 
 	try {

@@ -1,6 +1,7 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 import { customAlphabet } from "nanoid";
+import { rateLimiter } from "../lib/rate-limiter";
 import { turso } from "../lib/turso";
 
 const NANOID_LENGTH = 8;
@@ -9,6 +10,8 @@ const nanoid = customAlphabet(
 	NANOID_LENGTH,
 );
 
+const SHORTEN_RATE_LIMIT = { maxRequests: 5, windowMs: 15 * 60 * 1000 };
+
 export const server = {
 	shortenUrl: defineAction({
 		input: z.object({
@@ -16,7 +19,25 @@ export const server = {
 				.string({ message: "La URL es requerida." })
 				.url("La URL proporcionada no es válida."),
 		}),
-		handler: async ({ url }) => {
+		handler: async ({ url }, context) => {
+			const clientIp =
+				context.request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+				context.request.headers.get("cf-connecting-ip") ||
+				"unknown";
+
+			const { allowed, retryAfterMs } = rateLimiter(
+				`shorten:${clientIp}`,
+				SHORTEN_RATE_LIMIT,
+			);
+
+			if (!allowed) {
+				const minutes = Math.ceil(retryAfterMs / 60000);
+				throw new ActionError({
+					code: "TOO_MANY_REQUESTS",
+					message: `Demasiadas solicitudes. Intenta de nuevo en ${minutes} minuto${minutes > 1 ? "s" : ""}.`,
+				});
+			}
+
 			const id = nanoid();
 
 			try {
