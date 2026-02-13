@@ -1,0 +1,30 @@
+---
+interface Props {
+  type?: "button" | "submit";
+  variant?: "primary" | "secondary";
+  class?: string;
+}
+
+const {
+  type = "button",
+  variant = "primary",
+  class: className = "",
+} = Astro.props;
+
+const variants = {
+  primary: "bg-accent hover:bg-accent-hover text-primary font-semibold",
+  secondary:
+    "bg-surface hover:bg-accent/20 text-secondary border border-accent/30",
+};
+---
+
+<button
+  type={type}
+  class:list={[
+    "px-6 py-2.5 rounded-lg transition-colors cursor-pointer text-sm",
+    variants[variant],
+    className,
+  ]}
+>
+  <slot />
+</button>

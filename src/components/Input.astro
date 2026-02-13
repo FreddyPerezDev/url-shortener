@@ -1,0 +1,31 @@
+---
+interface Props {
+  placeholder?: string;
+  name?: string;
+  type?: astroHTML.JSX.HTMLInputTypeAttribute;
+  id?: string;
+  required?: boolean;
+  class?: string;
+}
+
+const {
+  placeholder = "",
+  name = "",
+  type = "text",
+  id,
+  required = false,
+  class: className = "",
+} = Astro.props;
+---
+
+<input
+  type={type}
+  name={name}
+  id={id}
+  placeholder={placeholder}
+  required={required}
+  class:list={[
+    "w-full bg-transparent text-primary placeholder:text-secondary/60 outline-none text-sm",
+    className,
+  ]}
+/>

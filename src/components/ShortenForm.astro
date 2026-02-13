@@ -1,0 +1,35 @@
+---
+import Button from "./Button.astro";
+import Input from "./Input.astro";
+---
+
+<form id="shorten-form" class="w-full max-w-lg mt-2">
+  <div
+    class="flex items-center gap-2 bg-surface rounded-full px-5 py-2.5 border border-accent/15"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      class="text-secondary shrink-0"
+      viewBox="0 0 24 24"
+      ><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+      ></path><path
+        d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+      ></path></svg
+    >
+    <Input
+      name="url"
+      type="url"
+      placeholder="Pega tu URL larga aquí..."
+      required={true}
+      class="flex-1 py-1"
+    />
+    <Button type="submit" variant="primary">Acortar</Button>
+  </div>
+</form>
