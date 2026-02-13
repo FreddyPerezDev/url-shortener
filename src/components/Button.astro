@@ -12,7 +12,8 @@ const {
 } = Astro.props;
 
 const variants = {
-  primary: "bg-accent hover:bg-accent-hover text-primary font-semibold",
+  primary:
+    "bg-accent hover:bg-accent-hover text-primary font-semibold disabled:bg-accent-disabled disabled:text-secondary disabled:cursor-not-allowed disabled:hover:bg-accent-disabled",
   secondary:
     "bg-surface hover:bg-accent/20 text-secondary border border-accent/30",
 };
