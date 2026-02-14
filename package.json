@@ -1,22 +1,22 @@
 {
-  "name": "url-shortener",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "@astrojs/node": "9.5.3",
-    "@libsql/client": "^0.17.0",
-    "@tailwindcss/vite": "^4.1.18",
-    "astro": "^5.17.1",
-    "nanoid": "5.1.6",
-    "tailwindcss": "^4.1.18"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.3.15"
-  }
+	"name": "url-shortener",
+	"type": "module",
+	"version": "0.0.1",
+	"scripts": {
+		"dev": "astro dev",
+		"build": "astro build",
+		"preview": "astro preview",
+		"astro": "astro"
+	},
+	"dependencies": {
+		"@astrojs/vercel": "9.0.4",
+		"@libsql/client": "0.17.0",
+		"@tailwindcss/vite": "4.1.18",
+		"astro": "5.17.1",
+		"nanoid": "5.1.6",
+		"tailwindcss": "4.1.18"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.3.15"
+	}
 }
