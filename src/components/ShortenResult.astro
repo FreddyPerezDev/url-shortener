@@ -2,7 +2,7 @@
   <div
     class="flex items-center justify-between bg-surface/60 rounded-full px-5 py-3 border border-accent/10"
   >
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 min-w-0">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="18"
@@ -17,12 +17,13 @@
         ><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path
           d="M22 4 12 14.01l-3-3"></path></svg
       >
-      <span id="shorten-url" class="text-primary text-sm font-mono"></span>
+      <span id="shorten-url" class="text-primary text-sm font-mono truncate"
+      ></span>
     </div>
     <button
       id="copy-btn"
       type="button"
-      class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors text-sm cursor-pointer"
+      class="flex items-center gap-1.5 text-secondary hover:text-primary transition-colors text-sm cursor-pointer shrink-0"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
