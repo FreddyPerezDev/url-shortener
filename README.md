@@ -37,7 +37,7 @@ Una aplicación web moderna y minimalista para acortar URLs, construida con **As
 
 ---
 
-## 🏗️ Arquitectura del Proyecto
+## 🏗️ Estructura de Directorio del Proyecto
 
 ```text
 /
